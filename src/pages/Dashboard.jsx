@@ -11,8 +11,12 @@ export default function Dashboard() {
       <p>Role: {role}</p>
 
       <nav style={{ display: "flex", gap: "12px", margin: "16px 0" }}>
-        {(role === "admin" || role === "approver") && (
-          <Link to="/upload">Upload Document</Link>
+        {role === "admin" && <Link to="/upload">Upload Document</Link>}
+        {["admin", "reviewer", "manager", "finance_admin"].includes(role) && (
+          <Link to="/approvals">Approvals</Link>
+        )}
+        {["admin", "finance_admin"].includes(role) && (
+          <Link to="/reports">Reports</Link>
         )}
       </nav>
 
@@ -20,7 +24,7 @@ export default function Dashboard() {
 
       <hr />
       <p style={{ color: "#888" }}>
-        Approvals and reports will go here next.
+        Reports and AI insights will go here next.
       </p>
     </div>
   );

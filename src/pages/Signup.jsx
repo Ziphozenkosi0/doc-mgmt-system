@@ -57,8 +57,10 @@ export default function Signup() {
           Role
           <select value={role} onChange={(e) => setRole(e.target.value)}>
             <option value="viewer">Viewer</option>
-            <option value="approver">Approver</option>
-            <option value="admin">Admin</option>
+            <option value="reviewer">Reviewer (Approval Stage 1)</option>
+            <option value="manager">Manager (Approval Stage 2)</option>
+            <option value="finance_admin">Finance/Admin (Approval Stage 3)</option>
+            <option value="admin">Admin (Upload + full access)</option>
           </select>
         </label>
 

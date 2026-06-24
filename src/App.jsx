@@ -6,6 +6,8 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Dashboard from "./pages/Dashboard";
 import Upload from "./pages/Upload";
+import Approvals from "./pages/Approvals";
+import Reports from "./pages/Reports";
 import "./App.css";
 
 function App() {
@@ -27,8 +29,24 @@ function App() {
           <Route
             path="/upload"
             element={
-              <RoleRoute allowed={["admin", "approver"]}>
+              <RoleRoute allowed={["admin"]}>
                 <Upload />
+              </RoleRoute>
+            }
+          />
+          <Route
+            path="/approvals"
+            element={
+              <RoleRoute allowed={["admin", "reviewer", "manager", "finance_admin"]}>
+                <Approvals />
+              </RoleRoute>
+            }
+          />
+          <Route
+            path="/reports"
+            element={
+              <RoleRoute allowed={["admin", "finance_admin"]}>
+                <Reports />
               </RoleRoute>
             }
           />

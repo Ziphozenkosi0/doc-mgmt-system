@@ -33,6 +33,7 @@ export async function extractDocumentData(file, docType) {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
+      action: "extract",
       fileBase64,
       mimeType: imageFile.type,
       docType,
