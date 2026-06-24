@@ -1,0 +1,6 @@
+name = "doc-mgmt-extraction"
+main = "src/index.js"
+compatibility_date = "2025-01-01"
+
+# GEMINI_API_KEY is set as a secret via `wrangler secret put GEMINI_API_KEY`
+# — never written here in plain text.

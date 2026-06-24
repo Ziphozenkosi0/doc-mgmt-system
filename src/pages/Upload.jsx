@@ -1,8 +1,10 @@
 import { useState } from "react";
-import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { collection, addDoc, updateDoc, doc, serverTimestamp } from "firebase/firestore";
 import { db } from "../lib/firebase";
 import { useAuth } from "../lib/AuthContext";
 import { uploadFile } from "../lib/storage";
+import { extractDocumentData } from "../lib/extraction";
+import { checkForDuplicates } from "../lib/duplicateCheck";
 
 const ALLOWED_TYPES = ["application/pdf", "image/jpeg", "image/png"];
 
@@ -47,27 +49,63 @@ export default function Upload() {
     setStatus("Uploading file...");
 
     try {
-      // 1. Upload the actual file bytes (currently a placeholder — see storage.js)
+      // 1. Upload the actual file bytes to Supabase Storage.
       const uploaded = await uploadFile(file);
 
       setStatus("Saving document record...");
 
-      // 2. Create the Firestore record that the rest of the app
-      //    (extraction, approval, reports) will work from.
-      await addDoc(collection(db, "documents"), {
+      // 2. Create the initial Firestore record (extraction not done yet).
+      const docRef = await addDoc(collection(db, "documents"), {
         fileName: uploaded.fileName,
-        filePath: uploaded.path,      // Supabase storage path — used to generate signed URLs later
+        filePath: uploaded.path,
         fileSize: uploaded.size,
-        docType,                     // "invoice" | "credit_note"
-        status: "pending",           // pending | approved | rejected
-        approvalStage: 1,            // 1, 2, or 3
+        docType,
+        status: "pending",
+        approvalStage: 1,
         approvalHistory: [],
-        extracted: null,             // filled in later by Gemini extraction
+        extracted: null,
+        duplicateOf: null,
         uploadedBy: user.email,
         uploadedAt: serverTimestamp(),
       });
 
-      setStatus("Document uploaded successfully.");
+      // 3. Run AI extraction (vendor, date, amount, VAT, invoice number).
+      setStatus("Reading document with AI...");
+      let extracted = null;
+      let extractionError = null;
+      try {
+        extracted = await extractDocumentData(file, docType);
+      } catch (err) {
+        // Extraction failing shouldn't block the upload entirely — the
+        // document still exists and can be reviewed/approved manually.
+        extractionError = err.message;
+      }
+
+      // 4. Check for duplicates based on what was extracted.
+      let duplicates = [];
+      if (extracted) {
+        setStatus("Checking for duplicates...");
+        duplicates = await checkForDuplicates(extracted, docRef.id);
+      }
+
+      // 5. Update the Firestore record with extraction + duplicate results.
+      await updateDoc(doc(db, "documents", docRef.id), {
+        extracted,
+        extractionError,
+        isDuplicate: duplicates.length > 0,
+        duplicateOf: duplicates.length > 0 ? duplicates[0].id : null,
+      });
+
+      if (duplicates.length > 0) {
+        setStatus(
+          `Document uploaded, but a possible duplicate was found (matched on ${duplicates[0].reason.replace("_", " ")}). Flagged for review.`
+        );
+      } else if (extractionError) {
+        setStatus("Document uploaded, but AI extraction failed — it can still be reviewed manually.");
+      } else {
+        setStatus("Document uploaded and processed successfully.");
+      }
+
       setFile(null);
       e.target.reset();
     } catch (err) {
