@@ -1,5 +1,5 @@
 const corsHeaders = {
-  "Access-Control-Allow-Origin": "*", // tighten this to your real domain once deployed
+  "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Methods": "POST, OPTIONS",
   "Access-Control-Allow-Headers": "Content-Type",
 };
@@ -108,7 +108,7 @@ export default {
 
     try {
       const payload = await request.json();
-      const action = payload.action || "extract"; // default to extract for backward compatibility
+      const action = payload.action || "extract";
 
       let result;
       if (action === "extract") {
