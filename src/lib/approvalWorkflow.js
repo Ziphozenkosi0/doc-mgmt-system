@@ -2,14 +2,10 @@
 //   Stage 1: Reviewer  → approve/reject
 //   Stage 2: Manager   → approve/reject
 //   Stage 3: Finance/Admin → final approve/reject
-//
-// A document moves to the next stage only after being approved at the
-// current one. Rejecting at any stage ends the workflow immediately.
 
 import { doc, updateDoc, arrayUnion } from "firebase/firestore";
 import { db } from "./firebase";
 
-// Which role is responsible for approving at each stage.
 export const STAGE_ROLES = {
   1: "reviewer",
   2: "manager",
@@ -22,18 +18,13 @@ export const STAGE_LABELS = {
   3: "Finance/Admin",
 };
 
-// Can this user act on this document right now?
-// - Document must still be "pending" (not already approved/rejected)
-// - The user's role must match the role responsible for the document's current stage
-// - The user must not have already approved this same document at an earlier stage
-//   (separation of duties — see approvalHistory check)
 export function canUserActOnDocument(docData, userRole, userEmail) {
   if (docData.status !== "pending") return false;
 
   const requiredRole = STAGE_ROLES[docData.approvalStage];
   if (userRole !== requiredRole && userRole !== "admin") return false;
 
-  // Separation of duties: block the same person from approving twice.
+  
   const alreadyActed = (docData.approvalHistory || []).some(
     (entry) => entry.actedBy === userEmail
   );
