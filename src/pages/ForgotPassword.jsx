@@ -1,35 +1,41 @@
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useAuth } from "../lib/AuthContext";
 
-export default function Login() {
+export default function ForgotPassword() {
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [status, setStatus] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const { login } = useAuth();
-  const navigate = useNavigate();
+  const { resetPassword } = useAuth();
 
   async function handleSubmit(e) {
     e.preventDefault();
     setError("");
+    setStatus("");
     setLoading(true);
+
     try {
-      await login(email, password);
-      navigate("/dashboard");
+      await resetPassword(email);
+      setStatus("Check your inbox — we've sent a password reset link to that email.");
     } catch (err) {
-      setError("Incorrect email or password.");
+      setError("Couldn't send reset email. Double-check the address and try again.");
     }
+
     setLoading(false);
   }
 
   return (
     <div className="auth-page">
       <form onSubmit={handleSubmit} className="auth-form">
-        <h1>Log in</h1>
+        <h1>Reset password</h1>
+        <p style={{ fontSize: 13, color: "#64748b", textAlign: "center", margin: "-8px 0 4px 0" }}>
+          Enter your email and we'll send you a link to reset your password.
+        </p>
 
         {error && <p className="error">{error}</p>}
+        {status && <p className="status">{status}</p>}
 
         <label>
           Email
@@ -41,25 +47,12 @@ export default function Login() {
           />
         </label>
 
-        <label>
-          Password
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </label>
-
         <button type="submit" disabled={loading}>
-          {loading ? "Logging in..." : "Log in"}
+          {loading ? "Sending..." : "Send reset link"}
         </button>
 
-        <p style={{ textAlign: "right", marginTop: -8 }}>
-            <Link to="/forgot-password" style={{ fontSize: 13 }}>Forgot password?</Link>
-          </p>
-          <p>
-          Don't have an account? <Link to="/signup">Sign up</Link>
+        <p>
+          <Link to="/login">← Back to log in</Link>
         </p>
       </form>
     </div>

@@ -6,6 +6,7 @@ import {
   signInWithEmailAndPassword,
   signOut,
   onAuthStateChanged,
+  sendPasswordResetEmail
 } from "firebase/auth";
 import { doc, setDoc, getDoc } from "firebase/firestore";
 import { auth, db } from "./firebase";
@@ -57,11 +58,15 @@ export function AuthProvider({ children }) {
     return result.user;
   }
 
+  async function resetPassword(email) {
+  await sendPasswordResetEmail(auth, email);
+}
+
   async function logout() {
     await signOut(auth);
   }
 
-  const value = { user, role, loading, signup, login, logout };
+  const value = { user, role, loading, signup, login, logout, resetPassword };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

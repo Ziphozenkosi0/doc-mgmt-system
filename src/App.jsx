@@ -4,6 +4,7 @@ import ProtectedRoute from "./lib/ProtectedRoute";
 import RoleRoute from "./lib/RoleRoute";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
+import ForgotPassword from "./pages/ForgotPassword";
 import Dashboard from "./pages/Dashboard";
 import Upload from "./pages/Upload";
 import Approvals from "./pages/Approvals";
@@ -19,6 +20,7 @@ function App() {
           <Route path="/" element={<Navigate to="/login" replace />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route
             path="/dashboard"
             element={
