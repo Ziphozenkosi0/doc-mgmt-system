@@ -1,5 +1,3 @@
-// AuthContext — keeps track of "who is logged in" and "what role they have"
-// anywhere in the app, without passing props down manually everywhere.
 import { createContext, useContext, useEffect, useState } from "react";
 import {
   createUserWithEmailAndPassword,
@@ -14,17 +12,15 @@ import { auth, db } from "./firebase";
 const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null);     // Firebase auth user object
-  const [role, setRole] = useState(null);     // "admin" | "approver" | "viewer"
+  const [user, setUser] = useState(null);
+  const [role, setRole] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Fires whenever someone logs in, logs out, or refreshes the page.
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       setUser(firebaseUser);
 
       if (firebaseUser) {
-        // Look up this user's role from Firestore.
         const userDoc = await getDoc(doc(db, "users", firebaseUser.uid));
         if (userDoc.exists()) {
           setRole(userDoc.data().role);
@@ -43,7 +39,6 @@ export function AuthProvider({ children }) {
 
   async function signup(email, password, role) {
     const result = await createUserWithEmailAndPassword(auth, email, password);
-    // Save their role in Firestore, keyed by their unique user ID.
     await setDoc(doc(db, "users", result.user.uid), {
       email,
       role,
