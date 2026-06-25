@@ -1,19 +1,12 @@
-// extraction.js — sends a file to our Cloudflare Worker, which calls Groq's
-// vision model and returns structured data (vendor, date, amount, VAT,
-// invoice number). Groq's vision model only reads images, so PDFs are
-// converted to a PNG (first page) before being sent.
-
 import { convertPdfFirstPageToImage } from "./pdfToImage";
 
 const WORKER_URL = import.meta.env.VITE_EXTRACTION_WORKER_URL;
 
-// Converts a File object into a base64 string (without the data: prefix),
-// since that's the format we send over JSON to the Worker.
 function fileToBase64(file) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = () => {
-      const base64 = reader.result.split(",")[1]; // strip "data:image/png;base64,"
+      const base64 = reader.result.split(",")[1];
       resolve(base64);
     };
     reader.onerror = reject;
@@ -22,8 +15,7 @@ function fileToBase64(file) {
 }
 
 export async function extractDocumentData(file, docType) {
-  // If it's a PDF, convert its first page to an image first — Groq's
-  // vision model can't read PDFs directly.
+
   const imageFile =
     file.type === "application/pdf" ? await convertPdfFirstPageToImage(file) : file;
 
@@ -46,5 +38,5 @@ export async function extractDocumentData(file, docType) {
     throw new Error(data.error || "Extraction failed");
   }
 
-  return data.extracted; // { vendor, date, amount, vat, invoiceNumber }
+  return data.extracted;
 }
