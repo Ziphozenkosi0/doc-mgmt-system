@@ -1,16 +1,32 @@
-# React + Vite
+# Document Management System
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+A secure, AI-powered document management system built for invoice and credit note
+processing — built as a technical assessment for an AI Internship at PCG | MindRift.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- **Secure authentication** with role-based access (Admin, Reviewer, Manager,
+  Finance/Admin, Viewer)
+- **Document upload** for invoices and credit notes (PDF, JPG, PNG)
+- **AI-powered data extraction** — automatically reads vendor, date, amount, VAT,
+  and invoice number from uploaded documents
+- **3-step approval workflow** — Reviewer → Manager → Finance/Admin, with
+  separation of duties enforced
+- **Duplicate detection** — flags documents matching an existing invoice number,
+  or matching vendor + amount
+- **Reports** — filter by date range, vendor, status, and amount
+- **Export** — download filtered reports as Excel (.xlsx) or PDF
+- **AI insights** — plain-language analysis of spending trends and anomalies
 
-## React Compiler
+## Tech Stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **Frontend:** React + Vite, React Router
+- **Auth & Database:** Firebase (Authentication + Firestore)
+- **File Storage:** Supabase Storage
+- **AI Extraction & Insights:** Groq API (Llama 4 Scout vision model), called via
+  a Cloudflare Worker that keeps the API key secure
+- **PDF Handling:** pdf.js (client-side PDF-to-image conversion for AI extraction)
+- **Exports:** SheetJS (Excel), jsPDF (PDF)
+- **Hosting:** Netlify
 
-## Expanding the Oxlint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+## Project Structure
