@@ -1,8 +1,6 @@
 import { Navigate } from "react-router-dom";
 import { useAuth } from "./AuthContext";
 
-// Wrap a page in this to require login AND a specific role.
-// Usage: <RoleRoute allowed={["admin", "approver"]}><Upload /></RoleRoute>
 export default function RoleRoute({ allowed, children }) {
   const { user, role, loading } = useAuth();
 
