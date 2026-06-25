@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import { collection, query, where, onSnapshot, orderBy } from "firebase/firestore";
 import { db } from "../lib/firebase";
 import { useAuth } from "../lib/AuthContext";
@@ -73,8 +72,6 @@ export default function Approvals() {
 
   return (
     <div className="page">
-      <Link to="/dashboard" style={{ fontSize: 13, color: "#2563eb" }}>← Back to Dashboard</Link>
-      <h1>Approvals</h1>
       <p>Documents waiting on your review are shown first. Your role: <strong>{role}</strong></p>
 
       <h2>Awaiting your action ({actionableDocs.length})</h2>

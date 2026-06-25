@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
 import { collection, addDoc, updateDoc, doc, serverTimestamp } from "firebase/firestore";
 import { db } from "../lib/firebase";
 import { useAuth } from "../lib/AuthContext";
@@ -119,7 +118,6 @@ export default function Upload() {
 
   return (
     <div className="page">
-      <Link to="/dashboard" style={{ fontSize: 13, color: "#2563eb" }}>← Back to Dashboard</Link>
       <h1>Upload Document</h1>
       <p>Upload an invoice or credit note. It will enter the approval workflow automatically.</p>
 

@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
 import { fetchFilteredDocuments, summarizeDocuments } from "../lib/reportData";
 import { exportToExcel, exportToPDF } from "../lib/export";
 import { getAIInsights } from "../lib/aiInsights";
@@ -52,7 +51,6 @@ export default function Reports() {
 
   return (
     <div className="page">
-      <Link to="/dashboard" style={{ fontSize: 13, color: "#2563eb" }}>← Back to Dashboard</Link>
       <h1>Reports</h1>
       <p>Filter documents by date, vendor, status, and amount, then export or get AI insights.</p>
 

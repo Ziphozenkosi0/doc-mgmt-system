@@ -8,6 +8,7 @@ import Dashboard from "./pages/Dashboard";
 import Upload from "./pages/Upload";
 import Approvals from "./pages/Approvals";
 import Reports from "./pages/Reports";
+import Layout from "./lib/layout";
 import "./App.css";
 
 function App() {
@@ -22,7 +23,9 @@ function App() {
             path="/dashboard"
             element={
               <ProtectedRoute>
-                <Dashboard />
+                <Layout>
+                  <Dashboard />
+                </Layout>
               </ProtectedRoute>
             }
           />
@@ -30,7 +33,9 @@ function App() {
             path="/upload"
             element={
               <RoleRoute allowed={["admin"]}>
-                <Upload />
+                <Layout>
+                  <Upload />
+                </Layout>
               </RoleRoute>
             }
           />
@@ -38,7 +43,9 @@ function App() {
             path="/approvals"
             element={
               <RoleRoute allowed={["admin", "reviewer", "manager", "finance_admin"]}>
-                <Approvals />
+                <Layout>
+                  <Approvals />
+                </Layout>
               </RoleRoute>
             }
           />
@@ -46,7 +53,9 @@ function App() {
             path="/reports"
             element={
               <RoleRoute allowed={["admin", "finance_admin"]}>
-                <Reports />
+                <Layout>
+                  <Reports />
+                </Layout>
               </RoleRoute>
             }
           />
