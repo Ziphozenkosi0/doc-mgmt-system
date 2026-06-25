@@ -11,7 +11,7 @@ const ALLOWED_TYPES = ["application/pdf", "image/jpeg", "image/png"];
 export default function Upload() {
   const { user } = useAuth();
   const [file, setFile] = useState(null);
-  const [docType, setDocType] = useState("invoice"); // invoice | credit_note
+  const [docType, setDocType] = useState("invoice");
   const [status, setStatus] = useState("");
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
@@ -49,12 +49,12 @@ export default function Upload() {
     setStatus("Uploading file...");
 
     try {
-      // 1. Upload the actual file bytes to Supabase Storage.
+      
       const uploaded = await uploadFile(file);
 
       setStatus("Saving document record...");
 
-      // 2. Create the initial Firestore record (extraction not done yet).
+    
       const docRef = await addDoc(collection(db, "documents"), {
         fileName: uploaded.fileName,
         filePath: uploaded.path,
@@ -69,26 +69,25 @@ export default function Upload() {
         uploadedAt: serverTimestamp(),
       });
 
-      // 3. Run AI extraction (vendor, date, amount, VAT, invoice number).
+      
       setStatus("Reading document with AI...");
       let extracted = null;
       let extractionError = null;
       try {
         extracted = await extractDocumentData(file, docType);
       } catch (err) {
-        // Extraction failing shouldn't block the upload entirely — the
-        // document still exists and can be reviewed/approved manually.
+        
         extractionError = err.message;
       }
 
-      // 4. Check for duplicates based on what was extracted.
+      
       let duplicates = [];
       if (extracted) {
         setStatus("Checking for duplicates...");
         duplicates = await checkForDuplicates(extracted, docRef.id);
       }
 
-      // 5. Update the Firestore record with extraction + duplicate results.
+      
       await updateDoc(doc(db, "documents", docRef.id), {
         extracted,
         extractionError,
