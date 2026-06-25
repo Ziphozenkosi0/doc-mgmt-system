@@ -1,7 +1,3 @@
-// duplicateCheck.js — looks for existing documents that might be duplicates
-// of the one just uploaded, based on invoice number (primary check) and
-// vendor + amount (secondary, softer check).
-
 import { collection, query, where, getDocs } from "firebase/firestore";
 import { db } from "./firebase";
 
@@ -21,8 +17,6 @@ export async function checkForDuplicates(extracted, currentDocId) {
     });
   }
 
-  // Secondary check: same vendor + same amount (catches duplicates where the
-  // invoice number was misread or missing, but skip if we already matched above).
   if (extracted?.vendor && extracted?.amount && duplicates.length === 0) {
     const q = query(
       collection(db, "documents"),
