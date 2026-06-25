@@ -18,9 +18,7 @@ export default function Approvals() {
   const [rejectReason, setRejectReason] = useState({});
 
   useEffect(() => {
-    // Listen for all pending documents — we filter client-side for "can this
-    // user act on it" since that depends on role + history, not just a
-    // simple field match Firestore can query directly.
+
     const q = query(
       collection(db, "documents"),
       where("status", "==", "pending"),
