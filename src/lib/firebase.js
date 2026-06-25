@@ -14,7 +14,5 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 
-// auth = handles login/signup
-// db = Firestore, where we'll store users' roles, documents, approvals, etc.
 export const auth = getAuth(app);
 export const db = getFirestore(app);
