@@ -1,7 +1,7 @@
 # Document Management System
 
 A secure, AI-powered document management system built for invoice and credit note
-processing — built as a technical assessment for an AI Internship at PCG | MindRift.
+processing built as a technical assessment for an AI Internship at PCG | MindRift.
 
 ## Features
 
@@ -28,5 +28,3 @@ processing — built as a technical assessment for an AI Internship at PCG | Min
 - **PDF Handling:** pdf.js (client-side PDF-to-image conversion for AI extraction)
 - **Exports:** SheetJS (Excel), jsPDF (PDF)
 - **Hosting:** Netlify
-
-## Project Structure
