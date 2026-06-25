@@ -1,12 +1,3 @@
-// Cloudflare Worker — acts as a secure middleman between our React app
-// and the Groq API. The Groq API key lives here as a secret, never
-// in the browser, so it can't be stolen by anyone inspecting our frontend code.
-//
-// Handles two actions, chosen via the "action" field in the request body:
-//   "extract"  — reads an invoice/credit note image and pulls structured data
-//   "insights" — looks at a set of already-extracted documents and writes
-//                a short summary of trends, anomalies, and spending patterns
-
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*", // tighten this to your real domain once deployed
   "Access-Control-Allow-Methods": "POST, OPTIONS",
