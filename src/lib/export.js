@@ -1,6 +1,3 @@
-// export.js — turns a list of report documents into downloadable
-// Excel (.xlsx) and PDF files, entirely in the browser.
-
 import * as XLSX from "xlsx";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
